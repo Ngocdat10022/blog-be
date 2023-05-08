@@ -1,8 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import routerAuth from "./routes/auth/index.js";
-
+import routerAuth from "./routes/auth/auth.js";
+import routerPosts from "./routes/posts/posts.js";
+import routerUser from "./routes/user/user.js";
 const app = express();
 const port = process.env.PORT | 4000;
 
@@ -16,7 +17,8 @@ app.use(
 );
 
 app.use("/api/auth/", routerAuth);
-
+app.use("/api/posts/", routerPosts);
+app.use("/api/user/", routerUser);
 app.listen(port, () => {
   console.log(`this is ${port}`);
 });
