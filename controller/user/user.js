@@ -1,5 +1,6 @@
 import db from "../../database/db.js";
 import bcrypt from "bcryptjs";
+import { login } from "../auth/auth.js";
 
 export const updateUser = (req, res) => {
   const q = "SELECT * from user";
@@ -14,8 +15,6 @@ export const updateUser = (req, res) => {
           item?.username.trim() === username.trim() ||
           item?.email.trim() === email.trim()
       );
-
-    console.log("datafilter", newData);
     if (newData.length)
       return res.status(409).json("username or email already exits");
     if (newData.length === 0) {
@@ -24,7 +23,17 @@ export const updateUser = (req, res) => {
       const values = [username, email, avatar, userId];
       db.query(q, [...values], (err, data) => {
         if (err) return res.status(409).json(err);
-        return res.status(200).json("Update user successfully");
+        if (data) {
+          // const userId = req?.userId;
+          // const q = "SELECT * from user WHERE id=?";
+          // db.query(q, [userId], (err, data) => {
+          //   if (err) return res.status(409).json(err);
+          //   console.log("data user", data);
+          //   if (data) {
+          //   }
+          // });
+          return res.status(200).json("Update user successfully");
+        }
       });
     }
   });

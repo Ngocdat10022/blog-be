@@ -46,9 +46,10 @@ export const getPostsSimilar = (req, res) => {
 export const addPosts = (req, res) => {
   const q =
     "INSERT INTO posts (`title`,`des`,`date`,`img`, `cat`,`uid`) VALUES(?)";
-  const { title, des, img, cat } = req.body ?? {};
+  const { title, des, date, img, cat } = req.body ?? {};
+
+  console.log("img", img);
   const uid = req?.userId;
-  const date = null;
   const value = [title, des, date, img, cat, uid];
   db.query(q, [value], (err, data) => {
     if (err) return res.status("409").json(err);
