@@ -44,6 +44,9 @@ export const login = (req, res) => {
     );
     const { password, ...orther } = data[0];
 
-    return res.status(200).json({ ...orther, accessToken: token });
+    return res.status(200).json({
+      findUser: { ...orther },
+      accessToken: token,
+    });
   });
 };

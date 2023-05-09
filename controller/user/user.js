@@ -1,6 +1,6 @@
 import db from "../../database/db.js";
 import bcrypt from "bcryptjs";
-import { login } from "../auth/auth.js";
+import jwt from "jsonwebtoken";
 
 export const updateUser = (req, res) => {
   const q = "SELECT * from user";
@@ -24,15 +24,24 @@ export const updateUser = (req, res) => {
       db.query(q, [...values], (err, data) => {
         if (err) return res.status(409).json(err);
         if (data) {
-          // const userId = req?.userId;
-          // const q = "SELECT * from user WHERE id=?";
-          // db.query(q, [userId], (err, data) => {
-          //   if (err) return res.status(409).json(err);
-          //   console.log("data user", data);
-          //   if (data) {
-          //   }
-          // });
-          return res.status(200).json("Update user successfully");
+          const q = "SELECT * from user WHERE id=?";
+          db.query(q, [userId], (err, data) => {
+            if (err) return res.status(409).json(err);
+            if (data) {
+              // return res.status(200).json(data);
+              console.log("data", data);
+              const token = jwt.sign(
+                { id: data[0].id, username: data[0].username },
+                "jwtkey"
+              );
+              const { password, ...orther } = data[0];
+
+              return res.status(200).json({
+                findUser: { ...orther },
+                accessToken: token,
+              });
+            }
+          });
         }
       });
     }
