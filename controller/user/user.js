@@ -16,7 +16,9 @@ export const updateUser = (req, res) => {
           item?.email.trim() === email.trim()
       );
     if (newData.length)
-      return res.status(409).json("username or email already exits");
+      return res
+        .status(409)
+        .json(err, { message: "username or email already exits" });
     if (newData.length === 0) {
       const q =
         "UPDATE user SET `username`= ?,`email`= ?,`avatar`= ? WHERE `id`=? ";
@@ -33,6 +35,7 @@ export const updateUser = (req, res) => {
               return res
                 .status(409)
                 .json({ err: err, message: "Cập nhật không thành công" });
+
             if (data) {
               const token = jwt.sign(
                 { id: data[0].id, username: data[0].username },

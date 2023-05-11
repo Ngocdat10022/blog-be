@@ -9,7 +9,7 @@ export const register = (req, res) => {
 
   db.query(q, [email.trim(), username.trim()], async (err, data) => {
     if (err) return res.status(409).json(err);
-    if (data.length) res.status(409).json("user already exits");
+    if (data.length) res.status(409).json("user or email already exits");
 
     if (data.length === 0) {
       const salt = await bcrypt.genSalt(10);
@@ -42,6 +42,7 @@ export const login = (req, res) => {
       { id: data[0].id, username: data[0].username },
       "jwtkey"
     );
+
     const { password, ...orther } = data[0];
 
     return res.status(200).json({
