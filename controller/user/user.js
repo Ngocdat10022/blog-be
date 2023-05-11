@@ -22,14 +22,18 @@ export const updateUser = (req, res) => {
         "UPDATE user SET `username`= ?,`email`= ?,`avatar`= ? WHERE `id`=? ";
       const values = [username, email, avatar, userId];
       db.query(q, [...values], (err, data) => {
-        if (err) return res.status(409).json(err);
+        if (err)
+          return res
+            .status(409)
+            .json({ err: err, message: "Cập nhật không thành công" });
         if (data) {
           const q = "SELECT * from user WHERE id=?";
           db.query(q, [userId], (err, data) => {
-            if (err) return res.status(409).json(err);
+            if (err)
+              return res
+                .status(409)
+                .json({ err: err, message: "Cập nhật không thành công" });
             if (data) {
-              // return res.status(200).json(data);
-              console.log("data", data);
               const token = jwt.sign(
                 { id: data[0].id, username: data[0].username },
                 "jwtkey"
@@ -61,14 +65,18 @@ export const updatePassword = (req, res) => {
       password.trim(),
       data[0].password.trim()
     );
-    if (!isPassword) res.status(409).json("password is not correct");
+    if (!isPassword)
+      res.status(409).json({ err, message: "password is not correct" });
     if (isPassword) {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(newPassword, salt);
       const values = [hashedPassword, req?.userId];
       const q = "UPDATE user SET `password`= ? WHERE `id`=? ";
       db.query(q, [...values], (err, data) => {
-        if (err) return res.status(409).json(err);
+        if (err)
+          return res
+            .status(409)
+            .json({ err: err, message: "Cập nhật không thành công" });
         return res.status(200).json("Update password successfully");
       });
     }

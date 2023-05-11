@@ -69,6 +69,7 @@ export const addPosts = (req, res) => {
     return res.status(200).json("add post successfully");
   });
 };
+
 export const deletePosts = (req, res) => {
   const q = "DELETE from posts WHERE id=? AND `uid`=?";
   const id = req.params?.id;
