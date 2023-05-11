@@ -62,7 +62,10 @@ export const addPosts = (req, res) => {
   const uid = req?.userId;
   const value = [title, des, date, img, cat, uid];
   db.query(q, [value], (err, data) => {
-    if (err) return res.status("409").json(err);
+    if (err)
+      return res
+        .status("409")
+        .json({ err: err, message: "Thêm không thành công" });
     return res.status(200).json("add post successfully");
   });
 };
@@ -71,7 +74,10 @@ export const deletePosts = (req, res) => {
   const id = req.params?.id;
   const userId = req?.userId ?? null;
   db.query(q, [id, userId], (err, data) => {
-    if (err) return res.status(409).json(err);
+    if (err)
+      return res
+        .status(409)
+        .json({ err: err, message: "Xoá không thành công" });
     return res.status(200).json("delete post successfully");
   });
 };
@@ -86,7 +92,10 @@ export const updatePosts = (req, res) => {
   const values = [title, des, date, img, cat, id, userId];
 
   db.query(q, [...values], (err, data) => {
-    if (err) return res.status(409).json(err);
+    if (err)
+      return res
+        .status(409)
+        .json({ err: err, message: "Cập nhật không thành công" });
     return res.status(200).json("Update post successfully");
   });
 };
