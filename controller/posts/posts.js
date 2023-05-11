@@ -22,6 +22,16 @@ export const getDetailPosts = (req, res) => {
   });
 };
 
+export const searchPosts = (req, res) => {
+  const { name } = req.query;
+  const q = `SELECT * FROM posts WHERE title LIKE '%${name.trim()}%' OR cat LIKE '%${name.trim()}%'`;
+  db.query(q, (err, data) => {
+    if (err) return res.status(409).json(err);
+    // console.log("data", data);
+    if (data) res.status(200).json(data);
+  });
+};
+
 export const getPostsSimilar = (req, res) => {
   const idPosts = req?.params?.id;
 
